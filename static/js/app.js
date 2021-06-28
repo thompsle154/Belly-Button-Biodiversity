@@ -1,25 +1,58 @@
-//Build function to read json file using D3
-function buildMetaData(sample) {
-    d3.json("samples.json").then((data) => {
-      var metadata = data.metadata;
-      console.log(metadata);
+function init() {
+  // Grab a reference to the dropdown select element
+  var selector = d3.select("#selDataset");
 
-    // Filter the data
-    var buildingArray = metadata.filter(sampleObj => sampleObj.id == sample);
-    var result = buildingArray[0];
-    // Use d3 to select the required panel
-    var panelData = d3.select("#sample-metadata");
+  //Use the list of sample names to populate the select options
+  d3.json("samples.json").then((data) => {
+    var sampleNames = data.names;
 
-    // Clear the existing data in the html
-    panelData.html("");
-
-    // Use `Object.entries` to add each key and value pair to the panelData
-    Object.entries(result).forEach(([key, value]) => {
-      panelData.append("h6").text(`${key.toUpperCase()}: ${value}`);
+    sampleNames.forEach((sample) => {
+      selector
+        .append("option")
+        .text(sample)
+        .property("value", sample);
     });
+
+    //Use the first sample from the list to build the initial plots
+    var firstSample - sampleNames[0];
+    buildCharts(firstSample);
+    buildMetadata(firstSample);
   });
 }
 
+// Initialize the dashboard
+init();
+
+//Build function to read json file using D3
+function optionChanged(newSample) {
+  // Fetch new data each time a new sample is selected
+  buildMetadata(newSample);
+  buildCharts(newSample);
+} 
+
+// Demographics Panel
+function buildMetadata(sample) {
+  d3.json("samples.json").then((data) => {
+    var metadata = data.metadata;
+    // Filter the data for the object with the desired sample number
+    var resultArray = metadata.filter(sampleObj => sampleObj.id == sample);
+    var result = resultArray[0];
+    // Use d3 to select the panel
+    var panelData = d3.select("#sample-metadata");
+
+    // Use .html to clear any existing metadata
+    panelData.html("");
+
+    // Use Object.entries to add each key and value pair to the panel
+    // Inside the loop, use d3 to append new
+    // tabs for each key-value int he metadata
+    Object.entries(result).forEach(([key, value]) => {
+      panelData.append("h6").text(`${key.toUpperCase()}: ${value}`);
+    });
+  
+  });
+}
+    // console.log(metadata);
 function buildCharts(sample) {
     d3.json("samples.json").then((data) => {
       var sampleData = data.samples;
