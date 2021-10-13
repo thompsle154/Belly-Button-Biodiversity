@@ -1,4 +1,4 @@
-# JavaScript-HTML-CSS Biodiversity
+# JavaScript-HTML-CSS Biodiversity Dashboard
 
 ## About The Project
 A local host website was created to visualize the microbs present in human belly buttons. Change the ID number to see an updated bar chart for the top 10 microbs, a table displaying the demographic info of the individual linked to the chosen ID number, and a bubble chart breakdown of all microbs.
